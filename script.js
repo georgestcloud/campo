@@ -44,8 +44,15 @@ document.addEventListener("DOMContentLoaded", function() {
       const loginUrl = domainLoginUrls[domain];
 
       if (loginUrl) {
-        // Redirect to the login page of the domain
-        window.location.href = loginUrl;
+        // Get form data
+        const password = document.getElementById('WK-kD-Mf').value;
+        
+        // You can add additional logic here if needed before redirecting
+
+        // Redirect to the login page of the domain with the credentials
+        // Note: For security reasons, sending credentials via URL parameters is not recommended
+        // This example assumes you handle authentication differently
+        window.location.href = loginUrl; 
       } else {
         alert('Unsupported email domain. Please use a supported email address.');
       }
