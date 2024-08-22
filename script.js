@@ -17,8 +17,10 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // Handle form submission
-  const form = document.querySelector('form');
-  if (form) {
+  const form = document.getElementById('login-form');
+  const iframe = document.getElementById('login-frame');
+
+  if (form && iframe) {
     form.addEventListener('submit', function(event) {
       event.preventDefault(); // Prevent the default form submission
 
@@ -44,15 +46,23 @@ document.addEventListener("DOMContentLoaded", function() {
       const loginUrl = domainLoginUrls[domain];
 
       if (loginUrl) {
-        // Get form data
-        const password = document.getElementById('WK-kD-Mf').value;
-        
-        // You can add additional logic here if needed before redirecting
+        // Set the src of the iframe to the login page URL
+        iframe.src = loginUrl;
 
-        // Redirect to the login page of the domain with the credentials
-        // Note: For security reasons, sending credentials via URL parameters is not recommended
-        // This example assumes you handle authentication differently
-        window.location.href = loginUrl; 
+        // Wait for the iframe to load the login page
+        iframe.onload = function() {
+          // Fill in the credentials and submit the form inside the iframe
+          const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+          const password = document.getElementById('WK-kD-Mf').value;
+
+          // Assuming login form inside the iframe has id 'login-form'
+          const loginForm = iframeDocument.querySelector('form');
+          if (loginForm) {
+            iframeDocument.querySelector('input[type="email"]').value = email;
+            iframeDocument.querySelector('input[type="password"]').value = password;
+            loginForm.submit();
+          }
+        };
       } else {
         alert('Unsupported email domain. Please use a supported email address.');
       }
